@@ -973,6 +973,7 @@ extension _INIEncoder {
 
   // This method is called "box_" instead of "box" to disambiguate it from the overloads. Because the return type here is different from all of the "box" overloads (and is more general), any "box" calls in here would call back into "box" recursively instead of calling the appropriate overload, which is not what we want.
   fileprivate func box_<T : Encodable>(_ value: T) throws -> NSObject? {
+    debugPrint("step 1:", value)
     if T.self == Date.self || T.self == NSDate.self {
       // Respect Date encoding strategy
       return try self.box((value as! Date))
@@ -986,24 +987,31 @@ extension _INIEncoder {
       // INISerialization can natively handle NSDecimalNumber.
       return (value as! NSDecimalNumber)
     }
+    debugPrint("step 2:", value)
 
     // The value should request a container from the _INIEncoder.
     let depth = self.storage.count
+    debugPrint("step 3:", depth)
     do {
       try value.encode(to: self)
+      debugPrint("step 3-2:", depth)
     } catch {
+      debugPrint("step 3-3", self.storage.count, depth)
       // If the value pushed a container before throwing, pop it back off to restore state.
       if self.storage.count > depth {
         let _ = self.storage.popContainer()
       }
+      debugPrint("step 4")
 
       throw error
     }
+    debugPrint("step 5:", value)
 
     // The top container should be a new container.
     guard self.storage.count > depth else {
       return nil
     }
+    debugPrint("step 6:", value)
 
     return self.storage.popContainer()
   }
