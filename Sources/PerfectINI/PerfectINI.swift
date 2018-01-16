@@ -1,4 +1,3 @@
-import CoreFoundation
 import Foundation
 
 public enum INICodingError: Error {
