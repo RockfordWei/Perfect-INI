@@ -43,15 +43,9 @@ This project provides an encoder / decorder for [INI](https://en.wikipedia.org/w
 
 This package builds with Swift Package Manager of Swift 4 Tool Chain and is part of the [Perfect](https://github.com/PerfectlySoft/Perfect) project but can be used as an independent module.
 
-## Acknowledgement
-
-The key source file `PerfectINI.swift` is actually a combination of two sources:
-- Line #1 ~ #189 is the [Perfect-INIParser](https://github.com/PerfectlySoft/Perfect-INIParser/blob/master/Sources/INIParser/INIParser.swift)
-- Line #190 ~ 2601 (end of file) is based on [Apple's Swift JSONEncoder](https://github.com/apple/swift/blob/e5fdc0955ce662bd929c7e1706d4a1f1d0f5d397/stdlib/public/SDK/Foundation/JSONEncoder.swift) with only a very few modification on error throws.
-
 ## Quick Start
 
-This library provides a pair of `INIEncoder` and `INIDecoder` based on the current native JSONEncoder / JSONDecoder with a different serialization port.
+This library provides a pair of `INIEncoder` and `INIDecoder` for INI files.
 
 ### Encodable to INI
 
@@ -68,6 +62,8 @@ struct Place: Codable {
 }
 
 struct Configuration: Codable {
+  public var id = 0
+  public var tag = ""
   public var person = Person()
   public var place = Place()
 }
@@ -75,20 +71,23 @@ struct Configuration: Codable {
 let rocky = Person(name: "rocky", age: 21)
 let hongkong = Place(location: "china", history: 1000)
 
-let conf = Configuration(person: rocky, place: hongkong)
+let conf = Configuration(id: 101, tag: "mynotes", person: rocky, place: hongkong)
 let encoder = INIEncoder()
 let data = try encoder.encode(conf)
 ```
 The outcome of encoder is a standard Swift `Data` object, and the content should be like this:
 
 ``` ini
-[place]
-history = 1000
-location = "china"
+id = 101
+tag = mynotes
 
 [person]
-name = "rocky"
+name = rocky
 age = 21
+
+[place]
+history = 1000
+location = china
 ```
 
 ### INI to Decodable

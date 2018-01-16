@@ -20,10 +20,12 @@ struct Place: Codable, Equatable {
 }
 
 struct Configuration: Codable, Equatable {
+  public var id = 0
+  public var tag = ""
   public var person = Person()
   public var place = Place()
   static func == (lhs: Configuration, rhs: Configuration) -> Bool {
-    return lhs.person == rhs.person && lhs.place == rhs.place
+    return lhs.person == rhs.person && lhs.place == rhs.place && lhs.id == rhs.id && lhs.tag == rhs.tag
   }
 }
 
@@ -33,7 +35,7 @@ class PerfectINITests: XCTestCase {
     let rocky = Person(name: "rocky", age: 21)
     let hongkong = Place(location: "china", history: 1000)
 
-    let conf = Configuration(person: rocky, place: hongkong)
+    let conf = Configuration(id: 101, tag: "mynotes", person: rocky, place: hongkong)
     let encoder = INIEncoder()
     do {
       let data = try encoder.encode(conf)
