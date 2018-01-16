@@ -201,11 +201,6 @@ fileprivate class INIParser {
     var variable: String? = nil
     for c in line {
       switch c {
-      case " ", "\t":
-        if state == .singleQuotation || state == .doubleQuotation {
-          cache.append(c)
-        }
-        break
       case "[":
         if state == .variable {
           cache = ""
@@ -268,7 +263,9 @@ fileprivate class INIParser {
     guard state == .value, let v = variable else {
       throw INICodingError.unsupported
     }
-    return ContentType.assignment(v, cache)
+    return ContentType.assignment(
+      v.trimmingCharacters(in: [" ", "\t", "\n", "\r"]),
+      cache.trimmingCharacters(in: [" ", "\t", "\n", "\r"]))
   }
 
   public init(_ data: Data) throws {

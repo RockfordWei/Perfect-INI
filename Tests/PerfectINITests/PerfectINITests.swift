@@ -35,7 +35,7 @@ class PerfectINITests: XCTestCase {
     let rocky = Person(name: "rocky", age: 21)
     let hongkong = Place(location: "china", history: 1000)
 
-    let conf = Configuration(id: 101, tag: "mynotes", person: rocky, place: hongkong)
+    let conf = Configuration(id: 101, tag: "my notes", person: rocky, place: hongkong)
     let encoder = INIEncoder()
     do {
       let data = try encoder.encode(conf)

@@ -71,7 +71,7 @@ struct Configuration: Codable {
 let rocky = Person(name: "rocky", age: 21)
 let hongkong = Place(location: "china", history: 1000)
 
-let conf = Configuration(id: 101, tag: "mynotes", person: rocky, place: hongkong)
+let conf = Configuration(id: 101, tag: "my notes", person: rocky, place: hongkong)
 let encoder = INIEncoder()
 let data = try encoder.encode(conf)
 ```
@@ -79,7 +79,7 @@ The outcome of encoder is a standard Swift `Data` object, and the content should
 
 ``` ini
 id = 101
-tag = mynotes
+tag = my notes
 
 [person]
 name = rocky
