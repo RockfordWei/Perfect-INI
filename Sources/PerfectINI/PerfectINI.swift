@@ -1,11 +1,16 @@
 import Foundation
 
+/// Coding Errors
 public enum INICodingError: Error {
+  /// type or statement is not supported
   case unsupported
+  /// required key is missing
   case missing
+  /// statement is malformed
   case malformed
 }
 
+/// Encoder for INI files
 open class INIEncoder: Encoder {
   public var codingPath: [CodingKey] = []
 
@@ -13,6 +18,7 @@ open class INIEncoder: Encoder {
 
   internal let _depth: Int
 
+  /// constructor
   public init() {
     _depth = 0
   }
@@ -43,6 +49,10 @@ open class INIEncoder: Encoder {
     fatalError("unsupported singleValueContainer")
   }
 
+  /// convert an encodable to an INI file buffer
+  /// - parameter value: data to encode
+  /// - returns: data buffer, utf8 string actually.
+  /// - throws: INICodingError or CodingErrors.
   open func encode<T : Encodable>(_ value: T) throws -> Data {
     try value.encode(to: self)
     var data = Data()
@@ -491,6 +501,7 @@ fileprivate struct INIReader<K : CodingKey>: KeyedDecodingContainerProtocol {
   }
 }
 
+/// Decoder for INI files.
 open class INIDecoder: Decoder {
   public var codingPath: [CodingKey] = []
 
@@ -512,6 +523,11 @@ open class INIDecoder: Decoder {
     fatalError("unsupported singleValueContainer")
   }
 
+  /// decode an INI file and convert it to the expected type
+  /// - parameter type: decodable type definition
+  /// - parameter data: data buffer of the INI file
+  /// - returns: an instance decoded from the INI file
+  /// - throws: INICodingError or CodingErrors
   open func decode<T : Decodable>(_ type: T.Type, from data: Data) throws -> T {
     let ps = try INIParser(data)
     storage = ps._sections
